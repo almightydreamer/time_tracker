@@ -1,5 +1,5 @@
 class RequestParameters {
   static Map<String, String> requestHeaders = {
-    'app-id': '6112dc7c3f812e0d9b6679dd'
   };
+  static String apiKey = 'e28d65c03b0403a626edf4c8ad6b8eeb';
 }
