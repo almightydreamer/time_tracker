@@ -1,15 +1,18 @@
 import 'package:data/core/db/db.dart';
+import 'package:data/modules/home/dto/action_local_dto.dart';
 import 'package:data/modules/home/dto/activity_local_dto.dart';
 import 'package:domain/modules/home/activity/entity/activity_entity.dart';
+import 'package:drift/drift.dart';
 
 class ActivityMapper {
-  ActivityEntity mapLocalToEntity(ActivityLocalDTO input) {
+  ActivityEntity mapLocalToEntity(ActivityLocalDTO activity, ActionLocalDTO action) {
     return ActivityEntity(
-        id: input.id,
-        day: input.day,
-        actionId: input.actionId,
-        endOfActivity: input.endOfActivity,
-        startOfActivity: input.startOfActivity);
+        id: activity.id,
+        day: activity.day,
+        actionId: activity.actionId,
+        actionName: action.name,
+        endOfActivity: activity.endOfActivity,
+        startOfActivity: activity.startOfActivity);
   }
 
   ActivityLocalDTO mapDataToLocal(ActivityData data) {
@@ -23,7 +26,11 @@ class ActivityMapper {
 
   ActivityCompanion mapEntityToData(ActivityEntity entity) {
     return ActivityCompanion.insert(
-        dayId: entity.day, actionId: entity.actionId, startTime: entity.startOfActivity, endTime: entity.endOfActivity);
+      dayId: entity.day,
+      actionId: entity.actionId,
+      startTime: entity.startOfActivity,
+      endTime: Value(entity.endOfActivity),
+    );
   }
 
 //MovieLocalDTO mapDataToLocal(MovieData input) {}

@@ -2,23 +2,118 @@
 
 part of 'db.dart';
 
-// **************************************************************************
-// DriftDatabaseGenerator
-// **************************************************************************
-
 // ignore_for_file: type=lint
+class $ActivityTable extends Activity
+    with TableInfo<$ActivityTable, ActivityData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ActivityTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: false);
+  static const VerificationMeta _dayIdMeta = const VerificationMeta('dayId');
+  @override
+  late final GeneratedColumn<int> dayId = GeneratedColumn<int>(
+      'day_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _actionIdMeta =
+      const VerificationMeta('actionId');
+  @override
+  late final GeneratedColumn<int> actionId = GeneratedColumn<int>(
+      'action_id', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _startTimeMeta =
+      const VerificationMeta('startTime');
+  @override
+  late final GeneratedColumn<DateTime> startTime = GeneratedColumn<DateTime>(
+      'start_time', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _endTimeMeta =
+      const VerificationMeta('endTime');
+  @override
+  late final GeneratedColumn<DateTime> endTime = GeneratedColumn<DateTime>(
+      'end_time', aliasedName, true,
+      type: DriftSqlType.dateTime, requiredDuringInsert: false);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, dayId, actionId, startTime, endTime];
+  @override
+  String get aliasedName => _alias ?? 'activity';
+  @override
+  String get actualTableName => 'activity';
+  @override
+  VerificationContext validateIntegrity(Insertable<ActivityData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('day_id')) {
+      context.handle(
+          _dayIdMeta, dayId.isAcceptableOrUnknown(data['day_id']!, _dayIdMeta));
+    } else if (isInserting) {
+      context.missing(_dayIdMeta);
+    }
+    if (data.containsKey('action_id')) {
+      context.handle(_actionIdMeta,
+          actionId.isAcceptableOrUnknown(data['action_id']!, _actionIdMeta));
+    } else if (isInserting) {
+      context.missing(_actionIdMeta);
+    }
+    if (data.containsKey('start_time')) {
+      context.handle(_startTimeMeta,
+          startTime.isAcceptableOrUnknown(data['start_time']!, _startTimeMeta));
+    } else if (isInserting) {
+      context.missing(_startTimeMeta);
+    }
+    if (data.containsKey('end_time')) {
+      context.handle(_endTimeMeta,
+          endTime.isAcceptableOrUnknown(data['end_time']!, _endTimeMeta));
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  ActivityData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ActivityData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      dayId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}day_id'])!,
+      actionId: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}action_id'])!,
+      startTime: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}start_time'])!,
+      endTime: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}end_time']),
+    );
+  }
+
+  @override
+  $ActivityTable createAlias(String alias) {
+    return $ActivityTable(attachedDatabase, alias);
+  }
+}
+
 class ActivityData extends DataClass implements Insertable<ActivityData> {
   final int id;
   final int dayId;
   final int actionId;
   final DateTime startTime;
-  final DateTime endTime;
+  final DateTime? endTime;
   const ActivityData(
       {required this.id,
       required this.dayId,
       required this.actionId,
       required this.startTime,
-      required this.endTime});
+      this.endTime});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -26,7 +121,9 @@ class ActivityData extends DataClass implements Insertable<ActivityData> {
     map['day_id'] = Variable<int>(dayId);
     map['action_id'] = Variable<int>(actionId);
     map['start_time'] = Variable<DateTime>(startTime);
-    map['end_time'] = Variable<DateTime>(endTime);
+    if (!nullToAbsent || endTime != null) {
+      map['end_time'] = Variable<DateTime>(endTime);
+    }
     return map;
   }
 
@@ -36,7 +133,9 @@ class ActivityData extends DataClass implements Insertable<ActivityData> {
       dayId: Value(dayId),
       actionId: Value(actionId),
       startTime: Value(startTime),
-      endTime: Value(endTime),
+      endTime: endTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(endTime),
     );
   }
 
@@ -48,7 +147,7 @@ class ActivityData extends DataClass implements Insertable<ActivityData> {
       dayId: serializer.fromJson<int>(json['dayId']),
       actionId: serializer.fromJson<int>(json['actionId']),
       startTime: serializer.fromJson<DateTime>(json['startTime']),
-      endTime: serializer.fromJson<DateTime>(json['endTime']),
+      endTime: serializer.fromJson<DateTime?>(json['endTime']),
     );
   }
   @override
@@ -59,7 +158,7 @@ class ActivityData extends DataClass implements Insertable<ActivityData> {
       'dayId': serializer.toJson<int>(dayId),
       'actionId': serializer.toJson<int>(actionId),
       'startTime': serializer.toJson<DateTime>(startTime),
-      'endTime': serializer.toJson<DateTime>(endTime),
+      'endTime': serializer.toJson<DateTime?>(endTime),
     };
   }
 
@@ -68,13 +167,13 @@ class ActivityData extends DataClass implements Insertable<ActivityData> {
           int? dayId,
           int? actionId,
           DateTime? startTime,
-          DateTime? endTime}) =>
+          Value<DateTime?> endTime = const Value.absent()}) =>
       ActivityData(
         id: id ?? this.id,
         dayId: dayId ?? this.dayId,
         actionId: actionId ?? this.actionId,
         startTime: startTime ?? this.startTime,
-        endTime: endTime ?? this.endTime,
+        endTime: endTime.present ? endTime.value : this.endTime,
       );
   @override
   String toString() {
@@ -106,7 +205,7 @@ class ActivityCompanion extends UpdateCompanion<ActivityData> {
   final Value<int> dayId;
   final Value<int> actionId;
   final Value<DateTime> startTime;
-  final Value<DateTime> endTime;
+  final Value<DateTime?> endTime;
   const ActivityCompanion({
     this.id = const Value.absent(),
     this.dayId = const Value.absent(),
@@ -119,11 +218,10 @@ class ActivityCompanion extends UpdateCompanion<ActivityData> {
     required int dayId,
     required int actionId,
     required DateTime startTime,
-    required DateTime endTime,
+    this.endTime = const Value.absent(),
   })  : dayId = Value(dayId),
         actionId = Value(actionId),
-        startTime = Value(startTime),
-        endTime = Value(endTime);
+        startTime = Value(startTime);
   static Insertable<ActivityData> custom({
     Expression<int>? id,
     Expression<int>? dayId,
@@ -145,7 +243,7 @@ class ActivityCompanion extends UpdateCompanion<ActivityData> {
       Value<int>? dayId,
       Value<int>? actionId,
       Value<DateTime>? startTime,
-      Value<DateTime>? endTime}) {
+      Value<DateTime?>? endTime}) {
     return ActivityCompanion(
       id: id ?? this.id,
       dayId: dayId ?? this.dayId,
@@ -189,75 +287,40 @@ class ActivityCompanion extends UpdateCompanion<ActivityData> {
   }
 }
 
-class $ActivityTable extends Activity
-    with TableInfo<$ActivityTable, ActivityData> {
+class $ActionTable extends Action with TableInfo<$ActionTable, ActionData> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
-  $ActivityTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
+  $ActionTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
   @override
   late final GeneratedColumn<int> id = GeneratedColumn<int>(
       'id', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: false);
-  final VerificationMeta _dayIdMeta = const VerificationMeta('dayId');
+  static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
-  late final GeneratedColumn<int> dayId = GeneratedColumn<int>(
-      'day_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  final VerificationMeta _actionIdMeta = const VerificationMeta('actionId');
+  late final GeneratedColumn<String> name = GeneratedColumn<String>(
+      'name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
   @override
-  late final GeneratedColumn<int> actionId = GeneratedColumn<int>(
-      'action_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  final VerificationMeta _startTimeMeta = const VerificationMeta('startTime');
+  List<GeneratedColumn> get $columns => [id, name];
   @override
-  late final GeneratedColumn<DateTime> startTime = GeneratedColumn<DateTime>(
-      'start_time', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
-  final VerificationMeta _endTimeMeta = const VerificationMeta('endTime');
+  String get aliasedName => _alias ?? 'action';
   @override
-  late final GeneratedColumn<DateTime> endTime = GeneratedColumn<DateTime>(
-      'end_time', aliasedName, false,
-      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  String get actualTableName => 'action';
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, dayId, actionId, startTime, endTime];
-  @override
-  String get aliasedName => _alias ?? 'activity';
-  @override
-  String get actualTableName => 'activity';
-  @override
-  VerificationContext validateIntegrity(Insertable<ActivityData> instance,
+  VerificationContext validateIntegrity(Insertable<ActionData> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('day_id')) {
+    if (data.containsKey('name')) {
       context.handle(
-          _dayIdMeta, dayId.isAcceptableOrUnknown(data['day_id']!, _dayIdMeta));
+          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
     } else if (isInserting) {
-      context.missing(_dayIdMeta);
-    }
-    if (data.containsKey('action_id')) {
-      context.handle(_actionIdMeta,
-          actionId.isAcceptableOrUnknown(data['action_id']!, _actionIdMeta));
-    } else if (isInserting) {
-      context.missing(_actionIdMeta);
-    }
-    if (data.containsKey('start_time')) {
-      context.handle(_startTimeMeta,
-          startTime.isAcceptableOrUnknown(data['start_time']!, _startTimeMeta));
-    } else if (isInserting) {
-      context.missing(_startTimeMeta);
-    }
-    if (data.containsKey('end_time')) {
-      context.handle(_endTimeMeta,
-          endTime.isAcceptableOrUnknown(data['end_time']!, _endTimeMeta));
-    } else if (isInserting) {
-      context.missing(_endTimeMeta);
+      context.missing(_nameMeta);
     }
     return context;
   }
@@ -265,25 +328,19 @@ class $ActivityTable extends Activity
   @override
   Set<GeneratedColumn> get $primaryKey => {id};
   @override
-  ActivityData map(Map<String, dynamic> data, {String? tablePrefix}) {
+  ActionData map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return ActivityData(
-      id: attachedDatabase.options.types
+    return ActionData(
+      id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      dayId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}day_id'])!,
-      actionId: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}action_id'])!,
-      startTime: attachedDatabase.options.types
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}start_time'])!,
-      endTime: attachedDatabase.options.types
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}end_time'])!,
+      name: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
     );
   }
 
   @override
-  $ActivityTable createAlias(String alias) {
-    return $ActivityTable(attachedDatabase, alias);
+  $ActionTable createAlias(String alias) {
+    return $ActionTable(attachedDatabase, alias);
   }
 }
 
@@ -394,69 +451,12 @@ class ActionCompanion extends UpdateCompanion<ActionData> {
   }
 }
 
-class $ActionTable extends Action with TableInfo<$ActionTable, ActionData> {
-  @override
-  final GeneratedDatabase attachedDatabase;
-  final String? _alias;
-  $ActionTable(this.attachedDatabase, [this._alias]);
-  final VerificationMeta _idMeta = const VerificationMeta('id');
-  @override
-  late final GeneratedColumn<int> id = GeneratedColumn<int>(
-      'id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: false);
-  final VerificationMeta _nameMeta = const VerificationMeta('name');
-  @override
-  late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns => [id, name];
-  @override
-  String get aliasedName => _alias ?? 'action';
-  @override
-  String get actualTableName => 'action';
-  @override
-  VerificationContext validateIntegrity(Insertable<ActionData> instance,
-      {bool isInserting = false}) {
-    final context = VerificationContext();
-    final data = instance.toColumns(true);
-    if (data.containsKey('id')) {
-      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
-    }
-    if (data.containsKey('name')) {
-      context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
-    } else if (isInserting) {
-      context.missing(_nameMeta);
-    }
-    return context;
-  }
-
-  @override
-  Set<GeneratedColumn> get $primaryKey => {id};
-  @override
-  ActionData map(Map<String, dynamic> data, {String? tablePrefix}) {
-    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return ActionData(
-      id: attachedDatabase.options.types
-          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      name: attachedDatabase.options.types
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-    );
-  }
-
-  @override
-  $ActionTable createAlias(String alias) {
-    return $ActionTable(attachedDatabase, alias);
-  }
-}
-
 abstract class _$LocalDatabase extends GeneratedDatabase {
   _$LocalDatabase(QueryExecutor e) : super(e);
   late final $ActivityTable activity = $ActivityTable(this);
   late final $ActionTable action = $ActionTable(this);
   @override
-  Iterable<TableInfo<Table, dynamic>> get allTables =>
+  Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [activity, action];

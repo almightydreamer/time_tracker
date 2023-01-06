@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:data/modules/home/dto/home_tables.dart';
 import 'package:data/modules/home/mapper/action_mapper.dart';
 import 'package:domain/modules/home/action/entity/action_entity.dart';
 import 'package:domain/modules/home/action/repository/action_repository.dart';
@@ -19,11 +20,14 @@ class ActivityRepositoryImpl implements ActivityRepository {
 
   @override
   Stream<Either<Failure, List<ActivityEntity>>> getLocalActivityList(int day) async* {
-    print('food_repository_impl > getLocalFOodList() started');
     try {
       var activitiesStream = _localDataSource.retrieveActivities(day);
       await for (var activities in activitiesStream) {
-        var list = activities.map((e) => ActivityMapper().mapLocalToEntity(e)).toList();
+        List<ActivityEntity> list = [];
+        for (var activity in activities) {
+          var action = await _localDataSource.getAction(activity.actionId);
+          list.add(ActivityMapper().mapLocalToEntity(activity, action));
+        }
         yield Right(list);
       }
     } catch (e, s) {
@@ -31,6 +35,18 @@ class ActivityRepositoryImpl implements ActivityRepository {
     }
   }
 
+  @override
+  Future<Either<Failure, ActivityEntity>> getLastActivity() async {
+    try {
+      var activity = await _localDataSource.getLastActivity();
+      var action = await _localDataSource.getAction(activity.actionId);
+      return Right(ActivityMapper().mapLocalToEntity(activity, action));
+    } catch (e, s) {
+      return Left(OtherFailure(e, s));
+    }
+  }
+
+  @override
   Future<Either<Failure, void>> saveLocalActivityList(List<ActivityEntity> list) async {
     try {
       var activities = list.map((e) => ActivityMapper().mapEntityToData(e)).toList();
