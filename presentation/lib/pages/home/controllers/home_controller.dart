@@ -9,17 +9,20 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 
 class HomeController extends GetxController {
+  RxList<ActionEntity> actions = RxList();
 
   final _saveActionsUseCase = GetIt.instance.get<SaveActionsUseCase>();
   final _saveActivityUseCase = GetIt.instance.get<SaveActivityUseCase>();
   final _getActionsUseCase = GetIt.instance.get<GetActionsUseCase>();
   final _getActivitiesUseCase = GetIt.instance.get<GetActivitiesUseCase>();
 
+
+
   final List<ActionEntity> actionList = [
-    ActionEntity(name: 'Smoking'),
-    ActionEntity(name: 'Drinking'),
-    ActionEntity(name: 'Eating'),
-    ActionEntity(name: 'Coding'),
+    const ActionEntity(name: 'Smoking'),
+    const ActionEntity(name: 'Drinking'),
+    const ActionEntity(name: 'Eating'),
+    const ActionEntity(name: 'Coding'),
   ];
 
   final ActivityEntity activity = ActivityEntity(
@@ -29,21 +32,21 @@ class HomeController extends GetxController {
     startOfActivity: DateTime.now(),
   );
 
-  Future<void> testActions() async {
+  Future<void> saveActions() async {
     var response = await _saveActionsUseCase(actionList);
     response.fold((l) {
       print('save left');
     }, (r) {
       print('save right');
     });
-
-    var actionsStream = _getActionsUseCase();
-    await for (var event in actionsStream) {
-      event.fold((l) {
-        print('get left');
-      }, (r) => r.forEach(print));
-    }
   }
+
+  Future<void> getActions() async {
+    var response = await _getActionsUseCase.call();
+    response.listen((event) {event.fold((left) => null, (right) => actions.value = right);});
+  }
+
+
 
   Future<void> testActivities() async {
     var response = await _saveActivityUseCase(activity);
