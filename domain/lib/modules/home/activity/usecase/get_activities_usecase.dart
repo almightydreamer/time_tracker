@@ -8,7 +8,7 @@ class GetActivitiesUseCase {
 
   GetActivitiesUseCase(this.repository);
 
-  Future<Either<Failure, List<ActivityEntity>>> call() {
-    return repository.getLocalActivityList();
+  Stream<Either<Failure, List<ActivityEntity>>> call(int day) {
+    return repository.getLocalActivityList(day);
   }
 }

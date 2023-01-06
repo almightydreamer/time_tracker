@@ -1,10 +1,14 @@
 import 'dart:io';
-import 'package:either_dart/either.dart';
-import '../datasource/local_datasource.dart';
-import '../mapper/movie_mapper.dart';
+
+import 'package:data/modules/home/mapper/action_mapper.dart';
+import 'package:domain/modules/home/action/entity/action_entity.dart';
+import 'package:domain/modules/home/action/repository/action_repository.dart';
+import 'package:domain/modules/core/response.dart';
 import 'package:domain/modules/home/activity/entity/activity_entity.dart';
 import 'package:domain/modules/home/activity/repository/activity_repository.dart';
-import 'package:domain/modules/core/response.dart';
+import 'package:either_dart/either.dart';
+import '../datasource/local_datasource.dart';
+import '../mapper/activity_mapper.dart';
 
 class ActivityRepositoryImpl implements ActivityRepository {
   late LocalDataSource _localDataSource;
@@ -14,7 +18,26 @@ class ActivityRepositoryImpl implements ActivityRepository {
   }
 
   @override
-  Future<Either<Failure, List<ActivityEntity>>> getApiMovieList() async {}
-  Future<Either<Failure, void>> saveLocalActionList(List<ActivityEntity> list) async {}
+  Stream<Either<Failure, List<ActivityEntity>>> getLocalActivityList(int day) async* {
+    print('food_repository_impl > getLocalFOodList() started');
+    try {
+      var activitiesStream = _localDataSource.retrieveActivities(day);
+      await for (var activities in activitiesStream) {
+        var list = activities.map((e) => ActivityMapper().mapLocalToEntity(e)).toList();
+        yield Right(list);
+      }
+    } catch (e, s) {
+      yield Left(OtherFailure(e, s));
+    }
+  }
 
+  Future<Either<Failure, void>> saveLocalActivityList(List<ActivityEntity> list) async {
+    try {
+      var activities = list.map((e) => ActivityMapper().mapEntityToData(e)).toList();
+      await _localDataSource.saveActivities(activities);
+      return Right(null);
+    } catch (e, s) {
+      return Left(OtherFailure(e, s));
+    }
+  }
 }

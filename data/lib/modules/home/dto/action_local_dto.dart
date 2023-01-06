@@ -1,8 +1,8 @@
-class ActionEntity {
+class ActionLocalDTO {
   final int? id;
   final String name;
 
-  const ActionEntity({
+  const ActionLocalDTO({
     this.id,
     required this.name,
   });

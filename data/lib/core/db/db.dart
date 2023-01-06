@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:data/modules/home/dto/local/home_tables.dart';
+import 'package:data/modules/home/dto/home_tables.dart';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
 import 'package:path_provider/path_provider.dart';
@@ -9,7 +9,7 @@ import 'package:path/path.dart' as p;
 part 'db.g.dart';
 
 @DriftDatabase(
-  tables:[Article, ArticleCategory, ArticleAuthor, ArticleTag]
+  tables:[Activity, Action]
 )
 class LocalDatabase extends _$LocalDatabase {
   LocalDatabase() : super(_openConnection());

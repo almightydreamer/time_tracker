@@ -8,7 +8,7 @@ class GetActionsUseCase {
 
   GetActionsUseCase(this.repository);
 
-  Future<Either<Failure, List<ActionEntity>>> call() {
+  Stream<Either<Failure, List<ActionEntity>>> call() {
     return repository.getLocalActionList();
   }
 }

@@ -5,6 +5,6 @@ import 'package:either_dart/either.dart';
 import '../entity/action_entity.dart';
 
 abstract class ActionRepository {
-  Future<Either<Failure, List<ActionEntity>>> getLocalActionList();
+  Stream<Either<Failure, List<ActionEntity>>> getLocalActionList();
   Future<Either<Failure, void>> saveLocalActionList(List<ActionEntity> list);
 }

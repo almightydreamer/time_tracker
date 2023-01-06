@@ -3,12 +3,13 @@ import 'package:either_dart/either.dart';
 import '../entity/activity_entity.dart';
 import '../repository/activity_repository.dart';
 
-class SaveActivitiesUseCase {
+class SaveActivityUseCase {
   final ActivityRepository repository;
 
-  SaveActivitiesUseCase(this.repository);
+  SaveActivityUseCase(this.repository);
 
-  Future<Either<Failure, void>> call(List<ActivityEntity> list) {
-    return repository.saveLocalActivity(list);
+  Future<Either<Failure, void>> call(ActivityEntity entity) {
+    List<ActivityEntity> list = [entity];
+    return repository.saveLocalActivityList(list);
   }
 }
