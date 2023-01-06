@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 import 'package:dependency_injection/dependency_injection.dart' as di;
 import 'package:get_it/get_it.dart';
 import 'package:presentation/pages/home/home_page.dart';
+import 'package:flutter/material.dart';
+
 
 void main() {
   di.init();
@@ -19,8 +21,7 @@ class MoviesApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    return GetMaterialApp(
+     return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(

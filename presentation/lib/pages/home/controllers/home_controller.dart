@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 
 class HomeController extends GetxController {
+
   final _saveActionsUseCase = GetIt.instance.get<SaveActionsUseCase>();
   final _saveActivityUseCase = GetIt.instance.get<SaveActivityUseCase>();
   final _getActionsUseCase = GetIt.instance.get<GetActionsUseCase>();
