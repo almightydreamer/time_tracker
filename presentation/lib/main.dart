@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 import 'package:dependency_injection/dependency_injection.dart' as di;
 import 'package:get_it/get_it.dart';
 import 'package:presentation/pages/home/home_page.dart';
+import 'package:flutter/material.dart';
+
 
 void main() {
   di.init();
@@ -18,27 +20,9 @@ class MoviesApp extends StatelessWidget {
   const MoviesApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final _saveActionsUseCase = GetIt.instance.get<SaveActionsUseCase>();
-    final _saveActivitiesUseCase = GetIt.instance.get<SaveActivityUseCase>();
-    final _getActionsUseCase = GetIt.instance.get<GetActionsUseCase>();
-    final _getActivitiesUseCase = GetIt.instance.get<GetActivitiesUseCase>();
+  Widget build(BuildContext context)   {
 
-    final List<ActionEntity> list = [
-      ActionEntity(name: 'Smoking'),
-      ActionEntity(name: 'Drinking'),
-      ActionEntity(name: 'Eating'),
-      ActionEntity(name: 'Coding'),
-    ];
-
-    _saveActionsUseCase(list);
-
-    var actionsStream = _getActionsUseCase();
-    await for(var event in actionsStream){
-      event.fold((left) => null, (right) => null)
-    }
-
-    return GetMaterialApp(
+     return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
