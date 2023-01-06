@@ -15,7 +15,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool isStarted = false;
   String activeAction = " ";
-  List actions = ["run", "smoke", "drink"];
+
 
   @override
   void initState() {
@@ -27,8 +27,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     Get.put(HomeController());
     HomeController controller = Get.find();
-    //controller.testActions();
-    controller.testActivities();
+    //controller.saveActions();
+    controller.getActions();
     return Scaffold(
       body: Container(
         color: Colors.white,
@@ -48,14 +48,14 @@ class _HomePageState extends State<HomePage> {
                       height: 50,
                       width: 150,
                       child: Draggable(
-                        data: "${actions[index]}",
-                        childWhenDragging: Text("${controller.action[index]}"),
-                        feedback: Text("${controller.action[index]}"),
-                        child: Text("${controller.action[index]}"),
+                        data: "${controller.actions[index].name}",
+                        childWhenDragging: Text("${controller.actions[index].name}"),
+                        feedback: Text("${controller.actions[index].name}"),
+                        child: Text("${controller.actions[index].name}"),
                       ),
                     );
                   },
-                  itemCount: controller.action.length,
+                  itemCount: controller.actions.length,
                 ),
               ),
               SizedBox(
