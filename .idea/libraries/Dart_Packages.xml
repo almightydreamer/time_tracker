@@ -47,16 +47,16 @@
         <entry key="async">
           <value>
             <list>
-              <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/async-2.9.0/lib" />
               <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/async-2.10.0/lib" />
+              <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/async-2.9.0/lib" />
             </list>
           </value>
         </entry>
         <entry key="boolean_selector">
           <value>
             <list>
-              <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/boolean_selector-2.1.0/lib" />
               <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/boolean_selector-2.1.1/lib" />
+              <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/boolean_selector-2.1.0/lib" />
             </list>
           </value>
         </entry>
@@ -442,8 +442,8 @@
         <entry key="js">
           <value>
             <list>
-              <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/js-0.6.4/lib" />
               <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/js-0.6.5/lib" />
+              <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/js-0.6.4/lib" />
             </list>
           </value>
         </entry>
@@ -471,8 +471,8 @@
         <entry key="matcher">
           <value>
             <list>
-              <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/matcher-0.12.12/lib" />
               <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/matcher-0.12.13/lib" />
+              <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/matcher-0.12.12/lib" />
             </list>
           </value>
         </entry>
@@ -738,8 +738,8 @@
         <entry key="source_span">
           <value>
             <list>
-              <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/source_span-1.9.0/lib" />
               <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/source_span-1.9.1/lib" />
+              <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/source_span-1.9.0/lib" />
             </list>
           </value>
         </entry>
@@ -781,16 +781,16 @@
         <entry key="stack_trace">
           <value>
             <list>
-              <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/stack_trace-1.10.0/lib" />
               <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/stack_trace-1.11.0/lib" />
+              <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/stack_trace-1.10.0/lib" />
             </list>
           </value>
         </entry>
         <entry key="stream_channel">
           <value>
             <list>
-              <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/stream_channel-2.1.0/lib" />
               <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/stream_channel-2.1.1/lib" />
+              <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/stream_channel-2.1.0/lib" />
             </list>
           </value>
         </entry>
@@ -804,8 +804,8 @@
         <entry key="string_scanner">
           <value>
             <list>
-              <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/string_scanner-1.1.1/lib" />
               <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/string_scanner-1.2.0/lib" />
+              <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/string_scanner-1.1.1/lib" />
             </list>
           </value>
         </entry>
@@ -833,8 +833,8 @@
         <entry key="test_api">
           <value>
             <list>
-              <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/test_api-0.4.12/lib" />
               <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/test_api-0.4.16/lib" />
+              <option value="$USER_HOME$/AppData/Local/Pub/Cache/hosted/pub.dartlang.org/test_api-0.4.12/lib" />
             </list>
           </value>
         </entry>

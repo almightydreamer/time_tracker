@@ -8,23 +8,7 @@ import 'package:presentation/pages/splash_screen/splash_screen.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 
 void main() {
-  runApp(const SplashScreen());
-}
-
-class SplashScreen extends StatelessWidget {
-  const SplashScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    FlutterNativeSplash.remove();
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          canvasColor: const Color(0xFF061E3B),
-        ),
-        home: SplashScreenPage());
-  }
+  runApp(const MoviesApp());
 }
 
 class MoviesApp extends StatelessWidget {
@@ -32,7 +16,6 @@ class MoviesApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FlutterNativeSplash.remove();
     return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
