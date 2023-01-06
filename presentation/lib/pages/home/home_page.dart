@@ -27,6 +27,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     Get.put(HomeController());
     HomeController controller = Get.find();
+    //controller.testActions();
+    controller.testActivities();
     return Scaffold(
       body: Container(
         color: Colors.white,

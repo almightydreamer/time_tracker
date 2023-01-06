@@ -20,8 +20,7 @@ class MoviesApp extends StatelessWidget {
   const MoviesApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context)   {
-
+  Widget build(BuildContext context) {
      return GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
