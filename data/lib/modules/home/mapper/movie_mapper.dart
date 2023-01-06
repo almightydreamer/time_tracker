@@ -1,6 +1,6 @@
 import 'package:data/core/db/db.dart';
 import 'package:data/modules/home/dto/local/article_local_dto.dart';
-import 'package:domain/modules/home/movies/entity/movie_entity.dart';
+import 'package:domain/modules/home/movies/entity/activity_entity.dart';
 import '../dto/api/movie_api_dto.dart';
 
 class MovieMapper {

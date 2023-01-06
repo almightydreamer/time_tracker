@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:domain/modules/home/movies/usecase/get_movies_usecase.dart';
+import 'package:domain/modules/home/movies/usecase/get_actions_usecase.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 
