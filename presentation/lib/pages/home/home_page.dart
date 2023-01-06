@@ -10,6 +10,8 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(HomeController());
     HomeController controller = Get.find();
+    //controller.testActions();
+    controller.testActivities();
     return Scaffold(
       body: Container(),
     );

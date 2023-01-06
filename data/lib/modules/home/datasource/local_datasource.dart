@@ -11,10 +11,15 @@ class LocalDataSource {
   const LocalDataSource({required this.db});
 
   Stream<List<ActionLocalDTO>> retrieveActions() async* {
+    print('s1');
     var query = db.action.select();
+    print('s2');
     var mainStream = query.watch().map((rows) {
+      print('s3');
       List<ActionLocalDTO> list = [];
+      print('s4');
       for (var row in rows) {
+        print('s5');
         list.add(ActionMapper().mapDataToLocal(row));
       }
       return list;
@@ -44,8 +49,8 @@ class LocalDataSource {
     yield* mainStream;
   }
 
-  Future<void> saveActivities(List<ActivityData> activities) async {
-    List<ActivityData> list = [];
+  Future<void> saveActivities(List<ActivityCompanion> activities) async {
+    List<ActivityCompanion> list = [];
     for (var activity in activities) {
       list.add(activity);
     }

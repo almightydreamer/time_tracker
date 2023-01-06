@@ -19,24 +19,6 @@ class MoviesApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _saveActionsUseCase = GetIt.instance.get<SaveActionsUseCase>();
-    final _saveActivitiesUseCase = GetIt.instance.get<SaveActivityUseCase>();
-    final _getActionsUseCase = GetIt.instance.get<GetActionsUseCase>();
-    final _getActivitiesUseCase = GetIt.instance.get<GetActivitiesUseCase>();
-
-    final List<ActionEntity> list = [
-      ActionEntity(name: 'Smoking'),
-      ActionEntity(name: 'Drinking'),
-      ActionEntity(name: 'Eating'),
-      ActionEntity(name: 'Coding'),
-    ];
-
-    _saveActionsUseCase(list);
-
-    var actionsStream = _getActionsUseCase();
-    await for(var event in actionsStream){
-      event.fold((left) => null, (right) => null)
-    }
 
     return GetMaterialApp(
         debugShowCheckedModeBanner: false,

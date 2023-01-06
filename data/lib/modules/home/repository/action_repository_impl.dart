@@ -17,11 +17,14 @@ class ActionRepositoryImpl implements ActionRepository {
 
   @override
   Stream<Either<Failure, List<ActionEntity>>> getLocalActionList() async* {
-    print('food_repository_impl > getLocalFOodList() started');
     try {
+      print('1');
       var actionsStream = _localDataSource.retrieveActions();
+      print('2');
       await for (var actions in actionsStream) {
+        print('3');
         var list = actions.map((e) => ActionMapper().mapLocalToEntity(e)).toList();
+        print('4');
         yield Right(list);
       }
     } catch (e, s) {
@@ -29,6 +32,7 @@ class ActionRepositoryImpl implements ActionRepository {
     }
   }
 
+  @override
   Future<Either<Failure, void>> saveLocalActionList(List<ActionEntity> list) async {
     try {
       var actions = list.map((e) => ActionMapper().mapEntityToData(e)).toList();
