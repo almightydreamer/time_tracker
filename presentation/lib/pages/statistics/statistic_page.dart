@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
+import 'package:presentation/pages/statistics/controllers/statistic_controller.dart';
 
 import '../../resources/custom_colors.dart';
 import '../../resources/text_styles.dart';
+import '../home/controllers/home_controller.dart';
+import '../time_line/controllers/time_line_controller.dart';
 
 class StatisticPage extends StatefulWidget {
   const StatisticPage({Key? key}) : super(key: key);
@@ -25,12 +30,21 @@ class _StatisticPageState extends State<StatisticPage> {
 
   @override
   void initState() {
+    Get.put(TimeLineController());
+    Get.put(HomeController());
+    Get.put(StatisticController());
     dropdownValue = list.first;
+    StatisticController statisticController = Get.find();
+    HomeController homeController = Get.find();
+    statisticController.getActivities(9);
+    homeController.getActions();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    StatisticController statisticController = Get.find();
+    HomeController homeController = Get.find();
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(16),
@@ -125,7 +139,7 @@ class _StatisticPageState extends State<StatisticPage> {
                                     width: 15,
                                   ),
                                   Text(
-                                    actions[index],
+                                    homeController.actions[index].name,
                                     style: TextStyles.robotoCondensed22w400
                                         .copyWith(
                                             height: 1.71,
@@ -135,7 +149,7 @@ class _StatisticPageState extends State<StatisticPage> {
                                     width: 40,
                                   ),
                                   Text(
-                                    "3 hours 23 minutes",
+                                    "${statisticController.activities[index].startOfActivity} si ${statisticController.activities[index].endOfActivity} ",
                                     style: TextStyles.robotoCondensed15w400
                                         .copyWith(
                                             height: 1.71,

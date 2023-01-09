@@ -6,6 +6,7 @@ import 'package:presentation/pages/home/controllers/home_controller.dart';
 import 'package:presentation/resources/custom_colors.dart';
 
 import '../../resources/text_styles.dart';
+import '../statistics/controllers/statistic_controller.dart';
 import 'controllers/time_line_controller.dart';
 
 class TimeLinePage extends StatefulWidget {
@@ -16,14 +17,12 @@ class TimeLinePage extends StatefulWidget {
 }
 
 class _TimeLinePageState extends State<TimeLinePage> {
-  final List actions = ["Running", "Jumping", "Smoking"];
-
   final List<String> list = <String>[
     "${int.parse(DateFormat('d').format(DateTime.now()))} ${(DateFormat('yMMMM').format(DateTime.now()))}",
     "${int.parse(DateFormat('d').format(DateTime.now())) - 1} ${(DateFormat('yMMMM').format(DateTime.now()))}",
     "${int.parse(DateFormat('d').format(DateTime.now())) - 2} ${(DateFormat('yMMMM').format(DateTime.now()))}",
   ];
-  late String dropdownValue;  
+  late String dropdownValue;
 
   final bool isLast = false;
 
@@ -31,10 +30,12 @@ class _TimeLinePageState extends State<TimeLinePage> {
   void initState() {
     Get.put(TimeLineController());
     Get.put(HomeController());
+    Get.put(StatisticController());
+
     dropdownValue = list.first;
     TimeLineController timeLineController = Get.find();
     HomeController homeController = Get.find();
-    timeLineController.getActivities(9);
+    timeLineController.getActivities(int.parse(dropdownValue));
     homeController.getActions();
     super.initState();
   }
@@ -142,25 +143,23 @@ class _TimeLinePageState extends State<TimeLinePage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 14.0),
-                        child: (timeLineController.activities.length != index+1) ? Container(
-                          width: 3,
-                          height: 40,
-                          color: Colors.lightGreen,
-                        ) : Expanded(
-                            child: Container(
-                            ),
-                          ),
-                        ),
-
-
+                        child:
+                            (timeLineController.activities.length != index + 1)
+                                ? Container(
+                                    width: 3,
+                                    height: 40,
+                                    color: Colors.lightGreen,
+                                  )
+                                : Expanded(
+                                    child: Container(),
+                                  ),
+                      ),
                     ],
                   );
                 },
                 itemCount: timeLineController.activities.length,
               ),
-
             ),
-
           ],
         ),
       ),
