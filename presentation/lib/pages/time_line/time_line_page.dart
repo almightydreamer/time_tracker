@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
+import 'package:presentation/pages/home/controllers/home_controller.dart';
+import 'package:presentation/resources/custom_colors.dart';
 
-import '../../../resources/text_styles.dart';
+import '../../resources/text_styles.dart';
+import 'controllers/time_line_controller.dart';
 
 class TimeLinePage extends StatefulWidget {
   const TimeLinePage({Key? key}) : super(key: key);
@@ -18,22 +23,30 @@ class _TimeLinePageState extends State<TimeLinePage> {
     "${int.parse(DateFormat('d').format(DateTime.now())) - 1} ${(DateFormat('yMMMM').format(DateTime.now()))}",
     "${int.parse(DateFormat('d').format(DateTime.now())) - 2} ${(DateFormat('yMMMM').format(DateTime.now()))}",
   ];
-  late String dropdownValue;
+  late String dropdownValue;  
 
   final bool isLast = false;
 
   @override
   void initState() {
+    Get.put(TimeLineController());
+    Get.put(HomeController());
     dropdownValue = list.first;
+    TimeLineController timeLineController = Get.find();
+    HomeController homeController = Get.find();
+    timeLineController.getActivities(9);
+    homeController.getActions();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    TimeLineController timeLineController = Get.find();
+    HomeController homeController = Get.find();
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(16),
-        color: Colors.white,
+        color: CustomColor.darkGreen,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -102,7 +115,7 @@ class _TimeLinePageState extends State<TimeLinePage> {
                             width: 16,
                           ),
                           Text(
-                            "8:00 ",
+                            "${timeLineController.activities[index].startOfActivity}",
                             style: TextStyles.robotoCondensed22w400.copyWith(
                                 height: 1.71, fontWeight: FontWeight.w600),
                           ),
@@ -118,7 +131,7 @@ class _TimeLinePageState extends State<TimeLinePage> {
                             width: 15,
                           ),
                           Text(
-                            actions[index],
+                            homeController.actions[index].name,
                             style: TextStyles.robotoCondensed22w400.copyWith(
                                 height: 1.71, fontWeight: FontWeight.w400),
                           ),
@@ -129,7 +142,7 @@ class _TimeLinePageState extends State<TimeLinePage> {
                       ),
                       Padding(
                         padding: const EdgeInsets.only(left: 14.0),
-                        child: (actions.length != index+1) ? Container(
+                        child: (timeLineController.activities.length != index+1) ? Container(
                           width: 3,
                           height: 40,
                           color: Colors.lightGreen,
@@ -143,7 +156,7 @@ class _TimeLinePageState extends State<TimeLinePage> {
                     ],
                   );
                 },
-                itemCount: actions.length,
+                itemCount: timeLineController.activities.length,
               ),
 
             ),

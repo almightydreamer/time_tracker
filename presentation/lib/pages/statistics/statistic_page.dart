@@ -43,7 +43,7 @@ class _StatisticPageState extends State<StatisticPage> {
               height: 56,
             ),
             Text(
-              "Here is your statistics",
+              "Heres is your statistics",
               style: TextStyles.robotoCondensed22w400.copyWith(
                   height: 1.71,
                   fontWeight: FontWeight.w600,

@@ -39,7 +39,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     Get.put(HomeController());
     HomeController controller = Get.find();
-    //controller.saveActions();
+    controller.saveActions();
+    //controller.saveActivity(entity);
     print(
         'activity ${DateFormat.Hms().format(controller.currentActivity.value.startOfActivity)} '
             '|| time ${DateFormat.Hms().format(DateTime.now()).toString()}');
