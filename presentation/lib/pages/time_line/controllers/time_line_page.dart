@@ -1,8 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../resources/custom_colors.dart';
 import '../../../resources/text_styles.dart';
 
 class TimeLinePage extends StatefulWidget {
@@ -58,7 +56,7 @@ class _TimeLinePageState extends State<TimeLinePage> {
                   style: TextStyles.robotoCondensed15w400
                       .copyWith(height: 1.71, fontWeight: FontWeight.w600),
                 ),
-                /*DropdownButton(
+                DropdownButton(
                   iconEnabledColor: Colors.cyanAccent,
                   dropdownColor: Colors.greenAccent,
                   value: dropdownValue,
@@ -73,7 +71,7 @@ class _TimeLinePageState extends State<TimeLinePage> {
                       child: Text(value),
                     );
                   }).toList(),
-                ),*/
+                ),
                 const SizedBox(
                   height: 40,
                 ),
@@ -103,12 +101,10 @@ class _TimeLinePageState extends State<TimeLinePage> {
                           const SizedBox(
                             width: 16,
                           ),
-                          Container(
-                            child: Text(
-                              "8:00 ",
-                              style: TextStyles.robotoCondensed22w400.copyWith(
-                                  height: 1.71, fontWeight: FontWeight.w600),
-                            ),
+                          Text(
+                            "8:00 ",
+                            style: TextStyles.robotoCondensed22w400.copyWith(
+                                height: 1.71, fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(
                             width: 15,
@@ -121,13 +117,10 @@ class _TimeLinePageState extends State<TimeLinePage> {
                           const SizedBox(
                             width: 15,
                           ),
-                          Container(
-                            //padding: const EdgeInsets.symmetric(horizontal: 35),
-                            child: Text(
-                              actions[index],
-                              style: TextStyles.robotoCondensed22w400.copyWith(
-                                  height: 1.71, fontWeight: FontWeight.w400),
-                            ),
+                          Text(
+                            actions[index],
+                            style: TextStyles.robotoCondensed22w400.copyWith(
+                                height: 1.71, fontWeight: FontWeight.w400),
                           ),
                           const SizedBox(
                             width: 40,
