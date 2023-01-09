@@ -19,19 +19,16 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
-  late TimerController _timerController;
   @override
   void initState() {
     Get.put(HomeController());
     HomeController controller = Get.find();
     controller.getActions();
     controller.resumeActivity();
-    _timerController = TimerController(this);
-    if (controller.currentActivity.value.actionId != 0) {
-      _timerController.start();
-      _timerController.forward(
-          from: controller.currentActivity.value.startOfActivity.second.toDouble() - DateTime.now().second);
-    }
+    Timer.periodic(const Duration(seconds: 1), (timer) {
+      print(controller.timerValue);
+      controller.timerValue++;
+    });
     super.initState();
   }
 
@@ -40,9 +37,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     Get.put(HomeController());
     HomeController controller = Get.find();
     //controller.saveActions();
-    print(
-        'activity ${DateFormat.Hms().format(controller.currentActivity.value.startOfActivity)} '
-            '|| time ${DateFormat.Hms().format(DateTime.now()).toString()}');
+    print('activity ${DateFormat.Hms().format(controller.currentActivity.value.startOfActivity)} '
+        '|| time ${DateFormat.Hms().format(DateTime.now()).toString()}');
     return Scaffold(
       body: Container(
         color: const Color(0xFF4e6151),
@@ -164,7 +160,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                     "${controller.currentActivity.value.actionName}",
                                     style: const TextStyle(fontSize: 48),
                                   ),
-                                  Text('for ${_timerController.duration}')
+                                  Text(
+                                      'for ${(Duration(seconds: controller.timerValue.value)).toString().split('.')[0].padLeft(8, '0')}', style: TextStyle(fontSize: 24),),
                                 ],
                               )),
                             ),
@@ -178,6 +175,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   }
 
   void triggerTimer() {
-    print("timer is started");
+    HomeController controller = Get.find();
+    controller.timerValue.value = 0;
   }
 }
