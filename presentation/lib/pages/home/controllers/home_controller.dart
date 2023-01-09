@@ -21,6 +21,8 @@ class HomeController extends GetxController {
   RxBool isStarted = false.obs;
   RxString activeAction = ''.obs;
   Rx<ActivityEntity> currentActivity = ActivityEntity(day: 0, actionId: 0, startOfActivity: DateTime.now()).obs;
+  RxInt timerValue = 0.obs;
+
 
   final List<ActionEntity> actionList = [
     const ActionEntity(name: 'Smoking'),
@@ -58,6 +60,7 @@ class HomeController extends GetxController {
       if (r.endOfActivity == null) {
         print('3');
         currentActivity.value = r;
+        timerValue += DateTime.now().difference(r.startOfActivity).inSeconds;
       }
     });
   }
