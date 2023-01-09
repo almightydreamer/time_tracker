@@ -16,6 +16,9 @@ class _HomePageState extends State<HomePage> {
   bool isStarted = false;
   String activeAction = " ";
 
+  void triggerTimer() {
+    print("timer is started");
+  }
 
   @override
   void initState() {
@@ -49,7 +52,8 @@ class _HomePageState extends State<HomePage> {
                       width: 150,
                       child: Draggable(
                         data: "${controller.actions[index].name}",
-                        childWhenDragging: Text("${controller.actions[index].name}"),
+                        childWhenDragging:
+                            Text("${controller.actions[index].name}"),
                         feedback: Text("${controller.actions[index].name}"),
                         child: Text("${controller.actions[index].name}"),
                       ),
@@ -62,11 +66,13 @@ class _HomePageState extends State<HomePage> {
                 width: 200,
                 height: 200,
                 child: DragTarget<String>(
-                  onAccept: (String active) =>
-                      setState(() {
-                        isStarted = true;
-                        activeAction = active;
-                      }),
+                  onAccept: (String active) {
+                    setState(() {
+                      isStarted = true;
+                      activeAction = active;
+                    });
+                    triggerTimer();
+                  },
                   builder: (context, _, __) {
                     return Container(
                       color: Colors.pinkAccent,
@@ -74,17 +80,17 @@ class _HomePageState extends State<HomePage> {
                       width: 200,
                       child: activeAction == " "
                           ? Container(
-                        color: Colors.cyan,
-                        height: 100,
-                        width: 100,
-                        child: Text("$activeAction $isStarted"),
-                      )
+                              color: Colors.cyan,
+                              height: 100,
+                              width: 100,
+                              child: Text("$activeAction $isStarted"),
+                            )
                           : Container(
-                        color: Colors.amber,
-                        height: 100,
-                        width: 100,
-                        child: Text("$activeAction $isStarted"),
-                      ),
+                              color: Colors.amber,
+                              height: 100,
+                              width: 100,
+                              child: Text("$activeAction $isStarted"),
+                            ),
                     );
                   },
                 ),
