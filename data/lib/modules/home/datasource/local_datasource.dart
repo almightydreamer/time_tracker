@@ -23,7 +23,8 @@ class LocalDataSource {
   }
 
   Future<ActionLocalDTO> getAction(int actionId) async {
-    var query = db.action.select()..where((e) => e.id.equals(actionId));
+    var query = db.action.select()
+      ..where((e) => e.id.equals(actionId));
     var value = await query.getSingle();
     return ActionMapper().mapDataToLocal(value);
   }
@@ -39,7 +40,8 @@ class LocalDataSource {
   }
 
   Stream<List<ActivityLocalDTO>> retrieveActivities(int day) async* {
-    var query = db.activity.select()..where((activity) => activity.dayId.equals(day));
+    var query = db.activity.select()
+      ..where((activity) => activity.dayId.equals(day));
     var mainStream = query.watch().map((rows) {
       List<ActivityLocalDTO> list = [];
       for (var row in rows) {
@@ -59,10 +61,18 @@ class LocalDataSource {
   Future<void> saveActivities(List<ActivityCompanion> activities) async {
     List<ActivityCompanion> list = [];
     for (var activity in activities) {
+      var query = db.activity.select();
+      var lastActivity = (await query.get()).last;
+      ActivityCompanion newActivity = ActivityCompanion.insert(dayId: lastActivity.dayId,
+        actionId: lastActivity.actionId,
+        startTime: lastActivity.startTime,
+        id: Value(lastActivity.id),
+        endTime: activity.startTime,);
+      list.add(newActivity);
       list.add(activity);
+      db.batch((batch) {
+        batch.insertAll(db.activity, list, mode: InsertMode.insertOrReplace);
+      });
     }
-    db.batch((batch) {
-      batch.insertAll(db.activity, list, mode: InsertMode.insertOrReplace);
-    });
   }
 }

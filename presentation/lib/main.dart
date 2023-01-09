@@ -29,6 +29,6 @@ class MoviesApp extends StatelessWidget {
         theme: ThemeData(
           canvasColor: Colors.transparent,
         ),
-        home: const StatisticPage());
+        home: const HomePage());
   }
 }
