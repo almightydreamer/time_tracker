@@ -6,7 +6,6 @@ import 'package:domain/modules/home/action/repository/action_repository.dart';
 import 'package:domain/modules/core/response.dart';
 import 'package:either_dart/either.dart';
 import '../datasource/local_datasource.dart';
-import '../mapper/activity_mapper.dart';
 
 class ActionRepositoryImpl implements ActionRepository {
   late LocalDataSource _localDataSource;
@@ -18,17 +17,23 @@ class ActionRepositoryImpl implements ActionRepository {
   @override
   Stream<Either<Failure, List<ActionEntity>>> getLocalActionList() async* {
     try {
-      print('1');
       var actionsStream = _localDataSource.retrieveActions();
-      print('2');
       await for (var actions in actionsStream) {
-        print('3');
         var list = actions.map((e) => ActionMapper().mapLocalToEntity(e)).toList();
-        print('4');
         yield Right(list);
       }
     } catch (e, s) {
       yield Left(OtherFailure(e, s));
+    }
+  }
+
+  @override
+  Future<Either<Failure, ActionEntity>> getLocalAction(int actionId) async {
+    try {
+      var value = await _localDataSource.getAction(actionId);
+      return Right(ActionMapper().mapLocalToEntity(value));
+    } catch (e, s) {
+      return Left(OtherFailure(e, s));
     }
   }
 

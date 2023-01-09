@@ -11,20 +11,21 @@ class LocalDataSource {
   const LocalDataSource({required this.db});
 
   Stream<List<ActionLocalDTO>> retrieveActions() async* {
-    print('s1');
     var query = db.action.select();
-    print('s2');
     var mainStream = query.watch().map((rows) {
-      print('s3');
       List<ActionLocalDTO> list = [];
-      print('s4');
       for (var row in rows) {
-        print('s5');
         list.add(ActionMapper().mapDataToLocal(row));
       }
       return list;
     });
     yield* mainStream;
+  }
+
+  Future<ActionLocalDTO> getAction(int actionId) async {
+    var query = db.action.select()..where((e) => e.id.equals(actionId));
+    var value = await query.getSingle();
+    return ActionMapper().mapDataToLocal(value);
   }
 
   Future<void> saveActions(List<ActionCompanion> actions) async {
@@ -47,6 +48,12 @@ class LocalDataSource {
       return list;
     });
     yield* mainStream;
+  }
+
+  Future<ActivityLocalDTO> getLastActivity() async {
+    var query = db.activity.select();
+    var value = await query.get();
+    return ActivityMapper().mapDataToLocal(value.last);
   }
 
   Future<void> saveActivities(List<ActivityCompanion> activities) async {

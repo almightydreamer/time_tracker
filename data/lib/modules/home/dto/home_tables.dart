@@ -20,7 +20,7 @@ class Activity extends Table {
 
   DateTimeColumn get startTime => dateTime()();
 
-  DateTimeColumn get endTime => dateTime()();
+  DateTimeColumn get endTime => dateTime().nullable()();
 
   @override
   Set<Column> get primaryKey => {id};

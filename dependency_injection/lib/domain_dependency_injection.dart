@@ -3,6 +3,7 @@ import 'package:domain/modules/home/action/usecase/save_actions_usecase.dart';
 import 'package:domain/modules/home/action/repository/action_repository.dart';
 import 'package:domain/modules/home/activity/usecase/get_activities_usecase.dart';
 import 'package:domain/modules/home/activity/usecase/save_activity_usecase.dart';
+import 'package:domain/modules/home/activity/usecase/resume_activity_usecase.dart';
 import 'package:domain/modules/home/activity/repository/activity_repository.dart';
 
 import 'package:get_it/get_it.dart';
@@ -15,6 +16,7 @@ Future<void> init() async {
   domainDi.registerLazySingleton<SaveActivityUseCase>(() => SaveActivityUseCase(domainDi<ActivityRepository>()));
   domainDi.registerLazySingleton<GetActionsUseCase>(() => GetActionsUseCase(domainDi<ActionRepository>()));
   domainDi.registerLazySingleton<SaveActionsUseCase>(() => SaveActionsUseCase(domainDi<ActionRepository>()));
+  domainDi.registerLazySingleton<GetLastActivityUseCase>(() => GetLastActivityUseCase(domainDi<ActivityRepository>()));
 
   print('DomainDI : initialization finished');
 }
