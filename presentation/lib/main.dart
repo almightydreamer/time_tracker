@@ -9,8 +9,9 @@ import 'package:dependency_injection/dependency_injection.dart' as di;
 import 'package:get_it/get_it.dart';
 import 'package:presentation/pages/home/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:presentation/pages/home_tab.dart';
 import 'package:presentation/pages/statistics/statistic_page.dart';
-import 'package:presentation/pages/time_line/controllers/time_line_page.dart';
+import 'package:presentation/pages/time_line/time_line_page.dart';
 
 
 void main() {
@@ -29,6 +30,6 @@ class MoviesApp extends StatelessWidget {
         theme: ThemeData(
           canvasColor: Colors.transparent,
         ),
-        home: const HomePage());
+        home: const HomeTabPage());
   }
 }
