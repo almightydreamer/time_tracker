@@ -20,7 +20,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   late TimerController _timerController;
-
   @override
   void initState() {
     Get.put(HomeController());
