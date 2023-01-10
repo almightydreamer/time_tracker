@@ -23,7 +23,7 @@ class _TimeLinePageState extends State<TimeLinePage> {
     "${int.parse(DateFormat('d').format(DateTime.now())) - 1} ${(DateFormat('yMMMM').format(DateTime.now()))}",
     "${int.parse(DateFormat('d').format(DateTime.now())) - 2} ${(DateFormat('yMMMM').format(DateTime.now()))}",
   ];
-  late String dropdownValue;  
+  late
 
   final bool isLast = false;
 
@@ -31,10 +31,10 @@ class _TimeLinePageState extends State<TimeLinePage> {
   void initState() {
     Get.put(TimeLineController());
     Get.put(HomeController());
-    dropdownValue = list.first;
     TimeLineController timeLineController = Get.find();
     HomeController homeController = Get.find();
-    timeLineController.getActivities(9);
+    timeLineController.dropdownValue.value = timeLineController.dayStringList.first;
+    timeLineController.getActivities(DateTime.now().day);
     homeController.getActions();
     super.initState();
   }
@@ -47,121 +47,135 @@ class _TimeLinePageState extends State<TimeLinePage> {
       body: Container(
         padding: const EdgeInsets.all(16),
         color: CustomColor.darkGreen,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 56,
-            ),
-            Text(
-              "This is your timeline",
-              style: TextStyles.robotoCondensed15w400
-                  .copyWith(height: 1.71, fontWeight: FontWeight.w600),
-            ),
-            const SizedBox(
-              height: 40,
-            ),
-            Row(
-              children: [
-                Text(
-                  "Select Date: ",
-                  style: TextStyles.robotoCondensed15w400
-                      .copyWith(height: 1.71, fontWeight: FontWeight.w600),
-                ),
-                DropdownButton(
-                  iconEnabledColor: Colors.cyanAccent,
-                  dropdownColor: Colors.greenAccent,
-                  value: dropdownValue,
-                  onChanged: (String? value) {
-                    setState(() {
-                      dropdownValue = value!;
-                    });
-                  },
-                  items: list.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
-              ],
-            ),
-            Expanded(
-              child: ListView.builder(
-                itemBuilder: (BuildContext context, int index) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const SizedBox(
-                            width: 2,
-                          ),
-                          Container(
-                            height: 25,
-                            width: 25,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(32),
+        child: Obx(
+          () => Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(
+                height: 56,
+              ),
+              Text(
+                "This is your timeline",
+                style: TextStyles.robotoCondensed15w400.copyWith(height: 1.71, fontWeight: FontWeight.w600),
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              Row(
+                children: [
+                  Text(
+                    "Select Date: ",
+                    style: TextStyles.robotoCondensed15w400.copyWith(height: 1.71, fontWeight: FontWeight.w600),
+                  ),
+          DropdownButton<String>(
+            value: timeLineController.dropdownValue.value,
+            elevation: 16,
+            dropdownColor: CustomColor.white,
+            onChanged: (String? value) {
+              timeLineController.dropdownValue.value = value!;
+              switch (value) {
+                case 'Today':
+                  {
+                    timeLineController.getActivities(DateTime.now().day);
+                  }
+                  break;
+
+                case 'Yesterday':
+                  {
+                    timeLineController.getActivities(DateTime.now().day - 1);
+                  }
+                  break;
+
+                case 'Two days ago':
+                  {
+                    timeLineController.getActivities(DateTime.now().day - 2);
+                  }
+                  break;
+              }
+            },
+            items: timeLineController.dayStringList.map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+              );
+            }).toList(),
+          ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                ],
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemBuilder: (BuildContext context, int index) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              width: 2,
+                            ),
+                            Container(
+                              height: 25,
+                              width: 25,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(32),
+                                color: Colors.lightGreen,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 16,
+                            ),
+                            Text(
+                              DateFormat.jm().format(timeLineController.activities[index].startOfActivity),
+                              style:
+                                  TextStyles.robotoCondensed22w400.copyWith(height: 1.71, fontWeight: FontWeight.w600),
+                            ),
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            Container(
+                              width: 50,
+                              height: 3,
                               color: Colors.lightGreen,
                             ),
-                          ),
-                          const SizedBox(
-                            width: 16,
-                          ),
-                          Text(
-                            "${timeLineController.activities[index].startOfActivity}",
-                            style: TextStyles.robotoCondensed22w400.copyWith(
-                                height: 1.71, fontWeight: FontWeight.w600),
-                          ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          Container(
-                            width: 50,
-                            height: 3,
-                            color: Colors.lightGreen,
-                          ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          Text(
-                            homeController.actions[index].name,
-                            style: TextStyles.robotoCondensed22w400.copyWith(
-                                height: 1.71, fontWeight: FontWeight.w400),
-                          ),
-                          const SizedBox(
-                            width: 40,
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 14.0),
-                        child: (timeLineController.activities.length != index+1) ? Container(
-                          width: 3,
-                          height: 40,
-                          color: Colors.lightGreen,
-                        ) : Expanded(
-                            child: Container(
+                            const SizedBox(
+                              width: 15,
                             ),
-                          ),
+                            Text(
+                              timeLineController.activities[index].actionName!,
+                              style:
+                                  TextStyles.robotoCondensed22w400.copyWith(height: 1.71, fontWeight: FontWeight.w400),
+                            ),
+                            const SizedBox(
+                              width: 40,
+                            ),
+                          ],
                         ),
-
-
-                    ],
-                  );
-                },
-                itemCount: timeLineController.activities.length,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 14.0),
+                          child: (timeLineController.activities.length != index + 1)
+                              ? Container(
+                                  width: 3,
+                                  height: 40,
+                                  color: Colors.lightGreen,
+                                )
+                              : Expanded(
+                                  child: Container(),
+                                ),
+                        ),
+                      ],
+                    );
+                  },
+                  itemCount: timeLineController.activities.length,
+                ),
               ),
-
-            ),
-
-          ],
+            ],
+          ),
         ),
       ),
     );
