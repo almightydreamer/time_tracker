@@ -16,7 +16,8 @@ class TimeLineController extends GetxController {
   final _saveActivityUseCase = GetIt.instance.get<SaveActivityUseCase>();
   final _getActionsUseCase = GetIt.instance.get<GetActionsUseCase>();
   final _getActivitiesUseCase = GetIt.instance.get<GetActivitiesUseCase>();
-
+  List<String> dayStringList = ['Today', 'Yesterday', 'Two days ago'];
+  RxString dropdownValue = ''.obs;
   RxBool isStarted = false.obs;
   RxString activeAction = ''.obs;
   Rx<ActivityEntity> currentActivity = ActivityEntity(day: 0, actionId: 0, startOfActivity: DateTime.now()).obs;
