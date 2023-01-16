@@ -26,9 +26,10 @@ class _HomeTabPageState extends State<HomeTabPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: IndexedStack(index: _selectedIndex, children: const [
-          HomePage(),
-          TimeLinePage(),
+        body: IndexedStack(index: _selectedIndex, children:  [
+           HomePage(),
+      TimeLinePage(),
+
           StatisticPage(),
         ]),
         bottomNavigationBar: AnimatedContainer(

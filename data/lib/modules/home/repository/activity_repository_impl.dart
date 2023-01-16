@@ -49,8 +49,11 @@ class ActivityRepositoryImpl implements ActivityRepository {
   @override
   Future<Either<Failure, void>> saveLocalActivityList(List<ActivityEntity> list) async {
     try {
+      print('repository saveActivity');
       var activities = list.map((e) => ActivityMapper().mapEntityToData(e)).toList();
+      print('repository saveActivity${activities}');
       await _localDataSource.saveActivities(activities);
+      print('repository saveActivity${activities}');
       return Right(null);
     } catch (e, s) {
       return Left(OtherFailure(e, s));

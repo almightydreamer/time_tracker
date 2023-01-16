@@ -22,6 +22,7 @@ class HomeController extends GetxController {
   RxString activeAction = ''.obs;
   Rx<ActivityEntity> currentActivity = ActivityEntity(day: 0, actionId: 0, startOfActivity: DateTime.now()).obs;
   RxInt timerValue = 0.obs;
+  RxBool addingAction = false.obs;
 
 
   final List<ActionEntity> actionList = [
@@ -38,9 +39,11 @@ class HomeController extends GetxController {
     startOfActivity: DateTime.now(),
   );
 
-  Future<void> saveActions() async {
+  Future<void> saveActions(ActionEntity action) async {
     print('saveActions');
-    var response = await _saveActionsUseCase(actionList);
+    List<ActionEntity> actions = [];
+    actions.add(action);
+    var response = await _saveActionsUseCase(actions);
     response.fold((l) {}, (r) {});
   }
 
@@ -66,6 +69,7 @@ class HomeController extends GetxController {
   }
 
   Future<void> saveActivity(ActivityEntity entity) async {
+    print('controller saveActivity');
     var response = await _saveActivityUseCase.call(entity);
   }
 
