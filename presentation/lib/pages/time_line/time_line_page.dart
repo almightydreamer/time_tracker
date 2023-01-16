@@ -164,9 +164,7 @@ class _TimeLinePageState extends State<TimeLinePage> {
                                   height: 40,
                                   color: Colors.lightGreen,
                                 )
-                              : Expanded(
-                                  child: Container(),
-                                ),
+                              : Container(),
                         ),
                       ],
                     );

@@ -36,6 +36,8 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     Get.put(HomeController());
     HomeController controller = Get.find();
+    ScrollController scrollController = ScrollController(initialScrollOffset: 0);
+    TextEditingController newActionController = TextEditingController();
 
     //controller.saveActions();
     print('activity ${DateFormat.Hms().format(controller.currentActivity.value.startOfActivity)} '
@@ -44,133 +46,201 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     return Scaffold(
       body: Container(
         color: const Color(0xFF4e6151),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              height: 50,
-            ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: ListView.separated(
-                  separatorBuilder: (BuildContext context, int index) {
-                    return Container(
-                      height: 1,
-                      color: Colors.black.withOpacity(0.2),
-                    );
-                  },
-                  itemBuilder: (BuildContext context, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 3),
-                      child: Draggable(
-                        data: controller.actions[index],
-                        feedback: Container(
-                          height: 50,
-                          width: 150,
-                          decoration: BoxDecoration(
-                              color: const Color(0xFF5e8c61),
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.black)),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 100,
-                                child: Text("${controller.actions[index].name}"),
-                              ),
-                            ],
-                          ),
-                        ),
-                        childWhenDragging: Container(
-                          height: 50,
-                        ),
-                        child: Container(
-                          height: 50,
-                          width: 150,
-                          decoration: BoxDecoration(
-                              color: const Color(0xFF5e8c61),
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.black)),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 100,
-                                child: Text(controller.actions[index].name),
-                              ),
-                            ],
-                          ),
+        child: Obx(
+          () => Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                height: 50,
+              ),
+              Expanded(
+                child: Container(
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: ListView.separated(
+                          controller: scrollController,
+                          separatorBuilder: (BuildContext context, int index) {
+                            return Container(
+                              height: 1,
+                              color: Colors.black.withOpacity(0.2),
+                            );
+                          },
+                          itemBuilder: (BuildContext context, int index) {
+                            return (controller.addingAction.value && index == controller.actions.length - 1)
+                                ? Padding(
+                                    padding: const EdgeInsets.only(top: 3),
+                                    child: Container(
+                                      height: 50,
+                                      width: MediaQuery.of(context).size.width - 30,
+                                      decoration: BoxDecoration(
+                                          color: const Color(0xFF5e8c61),
+                                          borderRadius: BorderRadius.circular(12),
+                                          border: Border.all(color: Colors.black)),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            width: MediaQuery.of(context).size.width - 50,
+                                            child: TextField(
+                                              autofocus: true,
+                                              controller: newActionController,
+                                              onEditingComplete: () {
+                                                if (newActionController.text == '') {
+                                                  controller.actions.removeAt(controller.actions.length);
+                                                  controller.addingAction.value = false;
+                                                  newActionController.clear();
+                                                  return;
+                                                }
+                                                controller.addingAction.value = false;
+                                                controller.saveActions(ActionEntity(name: newActionController.text));
+                                                newActionController.clear();
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 3),
+                                    child: Draggable(
+                                      data: controller.actions[index],
+                                      feedback: Container(
+                                        height: 50,
+                                        width: MediaQuery.of(context).size.width - 30,
+                                        decoration: BoxDecoration(
+                                            color: const Color(0xFF5e8c61),
+                                            borderRadius: BorderRadius.circular(12),
+                                            border: Border.all(color: Colors.black)),
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              width: MediaQuery.of(context).size.width - 50,
+                                              child: Text("${controller.actions[index].name}"),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      childWhenDragging: Container(
+                                        height: 50,
+                                      ),
+                                      child: Container(
+                                        height: 50,
+                                        width: 150,
+                                        decoration: BoxDecoration(
+                                            color: const Color(0xFF5e8c61),
+                                            borderRadius: BorderRadius.circular(12),
+                                            border: Border.all(color: Colors.black)),
+                                        child: Row(
+                                          children: [
+                                            Container(
+                                              width: 100,
+                                              child: Text(controller.actions[index].name),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                          },
+                          itemCount: (controller.actions.length),
                         ),
                       ),
-                    );
-                  },
-                  itemCount: controller.actions.length,
+                      Positioned(
+                        bottom: 16,
+                        right: 16,
+                        child: InkWell(
+                          onTap: () {
+                            controller.addingAction.value = true;
+                            controller.actions.add(ActionEntity(name: ''));
+                            scrollController.animateTo(scrollController.position.maxScrollExtent + 60,
+                                duration: Duration(milliseconds: 500), curve: Curves.linear);
+                          },
+                          child: Container(
+                            width: 64,
+                            height: 64,
+                            decoration: BoxDecoration(
+                              color: Color(0xFF94e8b4),
+                              borderRadius: BorderRadius.circular(64),
+                            ),
+                            child: Center(
+                              child: Icon(Icons.add),
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Container(
-              decoration: const BoxDecoration(
-                color: Color(0xFF5e8c61),
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(32), topRight: Radius.circular(32)),
-                boxShadow: [
-                  BoxShadow(
-                    color: Color(0xFF3b322c),
-                    blurRadius: 0,
-                    offset: Offset(0, -3),
-                  ),
-                ],
+              Container(
+                decoration: const BoxDecoration(
+                  color: Color(0xFF5e8c61),
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(32), topRight: Radius.circular(32)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color(0xFF3b322c),
+                      blurRadius: 0,
+                      offset: Offset(0, -3),
+                    ),
+                  ],
+                ),
+                width: MediaQuery.of(context).size.width,
+                height: 200,
+                child: DragTarget<ActionEntity>(onAccept: (ActionEntity action) {
+                  print('${action.name}');
+                  controller.saveActivity(ActivityEntity(
+                    day: DateTime.now().day,
+                    actionId: action.id!,
+                    startOfActivity: DateTime.now(),
+                  ));
+                  controller.isStarted.value = true;
+                  controller.activeAction.value = action.name;
+                  controller.currentActivity.value = ActivityEntity(
+                      day: DateTime.now().day, actionId: 0, startOfActivity: DateTime.now(), actionName: action.name);
+                  triggerTimer();
+                }, builder: (context, _, __) {
+                  return Container(
+                    height: 200,
+                    width: 200,
+                    child: controller.activeAction.value == " "
+                        ? Container(
+                            color: Colors.cyan,
+                            height: 100,
+                            width: 100,
+                            child: Center(
+                                child: Text(
+                                    "${controller.currentActivity.value.actionName} ${controller.isStarted.value}")),
+                          )
+                        : Container(
+                            height: 100,
+                            width: 100,
+                            child: Center(
+                                child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'You are currently',
+                                  style: const TextStyle(fontSize: 32),
+                                ),
+                                Text(
+                                  "${controller.currentActivity.value.actionName}",
+                                  style: const TextStyle(fontSize: 48),
+                                ),
+                                Text(
+                                  'for ${(Duration(seconds: controller.timerValue.value)).toString().split('.')[0].padLeft(8, '0')}',
+                                  style: TextStyle(fontSize: 24),
+                                ),
+                              ],
+                            )),
+                          ),
+                  );
+                }),
               ),
-              width: MediaQuery.of(context).size.width,
-              height: 200,
-              child: DragTarget<ActionEntity>(onAccept: (ActionEntity action) {
-                print('${action.name}');
-                controller.saveActivity(ActivityEntity(
-                  day: DateTime.now().day,
-                  actionId: action.id!,
-                  startOfActivity: DateTime.now(),
-                ));
-                controller.isStarted.value = true;
-                controller.activeAction.value = action.name;
-                controller.currentActivity.value = ActivityEntity(
-                    day: DateTime.now().day, actionId: 0, startOfActivity: DateTime.now(), actionName: action.name);
-                triggerTimer();
-              }, builder: (context, _, __) {
-                return Obx(() => Container(
-                      height: 200,
-                      width: 200,
-                      child: controller.activeAction.value == " "
-                          ? Container(
-                              color: Colors.cyan,
-                              height: 100,
-                              width: 100,
-                              child: Center(
-                                  child: Text(
-                                      "${controller.currentActivity.value.actionName} ${controller.isStarted.value}")),
-                            )
-                          : Container(
-                              height: 100,
-                              width: 100,
-                              child: Center(
-                                  child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'You are currently',
-                                    style: const TextStyle(fontSize: 32),
-                                  ),
-                                  Text(
-                                    "${controller.currentActivity.value.actionName}",
-                                    style: const TextStyle(fontSize: 48),
-                                  ),
-                                  Text(
-                                      'for ${(Duration(seconds: controller.timerValue.value)).toString().split('.')[0].padLeft(8, '0')}', style: TextStyle(fontSize: 24),),
-                                ],
-                              )),
-                            ),
-                    ));
-              }),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
