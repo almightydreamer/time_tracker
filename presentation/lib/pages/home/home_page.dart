@@ -193,6 +193,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                   controller.saveActivity(ActivityEntity(
                     day: DateTime.now().day,
                     actionId: action.id!,
+                    actionName: '',
                     startOfActivity: DateTime.now(),
                   ));
                   controller.isStarted.value = true;

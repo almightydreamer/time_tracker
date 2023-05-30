@@ -20,7 +20,7 @@ class HomeController extends GetxController {
 
   RxBool isStarted = false.obs;
   RxString activeAction = ''.obs;
-  Rx<ActivityEntity> currentActivity = ActivityEntity(day: 0, actionId: 0, startOfActivity: DateTime.now()).obs;
+  Rx<ActivityEntity> currentActivity = ActivityEntity(day: 0, actionId: 0, startOfActivity: DateTime.now(), actionName: 'Stand-by').obs;
   RxInt timerValue = 0.obs;
   RxBool addingAction = false.obs;
 
@@ -31,13 +31,6 @@ class HomeController extends GetxController {
     const ActionEntity(name: 'Eating'),
     const ActionEntity(name: 'Coding'),
   ];
-
-  final ActivityEntity activity = ActivityEntity(
-    day: DateTime.now().day,
-    actionId: 1,
-    endOfActivity: DateTime.now(),
-    startOfActivity: DateTime.now(),
-  );
 
   Future<void> saveActions(ActionEntity action) async {
     print('saveActions');
@@ -71,16 +64,5 @@ class HomeController extends GetxController {
   Future<void> saveActivity(ActivityEntity entity) async {
     print('controller saveActivity');
     var response = await _saveActivityUseCase.call(entity);
-  }
-
-  Future<void> testActivities() async {
-    print('testActivities');
-    var response = await _saveActivityUseCase(activity);
-    response.fold((l) {}, (r) {});
-
-    var actionsStream = _getActivitiesUseCase(DateTime.now().day);
-    await for (var event in actionsStream) {
-      event.fold((l) {}, (r) => r.forEach(print));
-    }
   }
 }

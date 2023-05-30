@@ -20,15 +20,6 @@ class TimeLineController extends GetxController {
   RxString dropdownValue = ''.obs;
   RxBool isStarted = false.obs;
   RxString activeAction = ''.obs;
-  Rx<ActivityEntity> currentActivity = ActivityEntity(day: 0, actionId: 0, startOfActivity: DateTime.now()).obs;
-
-
-  final ActivityEntity activity = ActivityEntity(
-    day: DateTime.now().day,
-    actionId: 1,
-    endOfActivity: DateTime.now(),
-    startOfActivity: DateTime.now(),
-  );
 
 
   Future<void> getActions() async {
