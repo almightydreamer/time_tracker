@@ -57,6 +57,12 @@ class LocalDataSource {
     return ActivityMapper().mapDataToLocal(value.last);
   }
 
+  ///
+  /// TMPS Project
+  ///
+  /// This is an example of Facade
+  ///
+
   Future<void> saveActivities(List<ActivityCompanion> activities) async {
     List<ActivityCompanion> list = [];
     for (var activity in activities) {
