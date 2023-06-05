@@ -1,9 +1,9 @@
 class ActionEntity {
-  final int? id;
-  final String name;
+  final int? actionId;
+  final String actionName;
 
   const ActionEntity({
-    this.id,
-    required this.name,
+    this.actionId,
+    required this.actionName,
   });
 }

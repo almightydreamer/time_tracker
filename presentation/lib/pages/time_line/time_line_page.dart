@@ -147,7 +147,7 @@ class _TimeLinePageState extends State<TimeLinePage> {
                               width: 15,
                             ),
                             Text(
-                              timeLineController.activities[index].actionName!,
+                              timeLineController.activities[index].actionName,
                               style:
                                   TextStyles.robotoCondensed22w400.copyWith(height: 1.71, fontWeight: FontWeight.w400),
                             ),

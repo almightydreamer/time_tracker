@@ -26,10 +26,9 @@ class _HomeTabPageState extends State<HomeTabPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: IndexedStack(index: _selectedIndex, children:  [
-           HomePage(),
-      TimeLinePage(),
-
+        body: IndexedStack(index: _selectedIndex, children: [
+          HomePage(),
+          TimeLinePage(),
           StatisticPage(),
         ]),
         bottomNavigationBar: AnimatedContainer(
@@ -54,11 +53,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
                             children: [
                               Text(
                                 "Home",
-                                style: TextStyles.robotoCondensed22w400
-                                    .copyWith(
-                                        color: CustomColor.darkGreen,
-                                        height: 1.33,
-                                        fontWeight: FontWeight.w700),
+                                style: TextStyles.robotoCondensed22w400.copyWith(color: CustomColor.darkGreen, height: 1.33, fontWeight: FontWeight.w700),
                               ),
                             ],
                           ),
@@ -69,10 +64,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
                         icon: SizedBox(
                           child: Text(
                             "TimeLine",
-                            style: TextStyles.robotoCondensed22w400.copyWith(
-                                color: CustomColor.darkGreen,
-                                height: 1.33,
-                                fontWeight: FontWeight.w700),
+                            style: TextStyles.robotoCondensed22w400.copyWith(color: CustomColor.darkGreen, height: 1.33, fontWeight: FontWeight.w700),
                           ),
                         ),
                         label: '•',
@@ -81,10 +73,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
                         icon: SizedBox(
                           child: Text(
                             "Statistics",
-                            style: TextStyles.robotoCondensed22w400.copyWith(
-                                color: CustomColor.darkGreen,
-                                height: 1.33,
-                                fontWeight: FontWeight.w700),
+                            style: TextStyles.robotoCondensed22w400.copyWith(color: CustomColor.darkGreen, height: 1.33, fontWeight: FontWeight.w700),
                           ),
                         ),
                         label: '•',

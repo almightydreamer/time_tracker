@@ -9,8 +9,6 @@ import 'package:domain/modules/home/action/entity/action_entity.dart';
 
 class ActivityEntity extends ActionEntity {
   final int? id;
-  final int actionId;
-  final String actionName;
   final List<ActivityEntity> subActivities;
   final int day;
   final DateTime startOfActivity;
@@ -19,10 +17,11 @@ class ActivityEntity extends ActionEntity {
   ActivityEntity({
     this.id,
     required this.day,
-    required this.actionId,
-    required this.actionName,
+    required int actionId,
+    required String actionName,
     this.subActivities = const [],
     this.endOfActivity,
     required this.startOfActivity,
-  }) : super(id: actionId, name: actionName);
+  }) : super(actionId: actionId, actionName: actionName);
+
 }

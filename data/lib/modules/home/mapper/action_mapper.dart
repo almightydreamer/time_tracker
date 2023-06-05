@@ -4,7 +4,7 @@ import 'package:domain/modules/home/action/entity/action_entity.dart';
 
 class ActionMapper {
   ActionEntity mapLocalToEntity(ActionLocalDTO input) {
-    return ActionEntity(id: input.id, name: input.name);
+    return ActionEntity(actionId: input.id, actionName: input.name);
   }
 
   ActionLocalDTO mapDataToLocal(ActionData data) {
@@ -12,6 +12,6 @@ class ActionMapper {
   }
 
   ActionCompanion mapEntityToData(ActionEntity entity) {
-    return ActionCompanion.insert(name: entity.name);
+    return ActionCompanion.insert(name: entity.actionName);
   }
 }

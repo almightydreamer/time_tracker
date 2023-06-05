@@ -35,7 +35,7 @@ class LocalDataSource {
     }
     print(list.toString());
     db.batch((batch) {
-      batch.insertAll(db.action, list, mode: InsertMode.insertOrReplace);
+      batch.insertAll(db.action, list, mode: InsertMode.insertOrReplace); 
     });
   }
 
@@ -82,7 +82,7 @@ class LocalDataSource {
           dayId: lastActivity.dayId,
           actionId: lastActivity.actionId,
           startTime: lastActivity.startTime,
-          id: Value(lastActivity.id),
+          id: Value(lastActivity.actionId),
           endTime: activity.startTime,
         );
         list.add(newActivity);

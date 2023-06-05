@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'package:domain/modules/home/action/entity/action_entity.dart';
 import 'package:domain/modules/home/action/usecase/get_actions_usecase.dart';
 import 'package:domain/modules/home/action/usecase/save_actions_usecase.dart';
@@ -23,14 +24,7 @@ class HomeController extends GetxController {
   Rx<ActivityEntity> currentActivity = ActivityEntity(day: 0, actionId: 0, startOfActivity: DateTime.now(), actionName: 'Stand-by').obs;
   RxInt timerValue = 0.obs;
   RxBool addingAction = false.obs;
-
-
-  final List<ActionEntity> actionList = [
-    const ActionEntity(name: 'Smoking'),
-    const ActionEntity(name: 'Drinking'),
-    const ActionEntity(name: 'Eating'),
-    const ActionEntity(name: 'Coding'),
-  ];
+  RxBool savingActivity = false.obs;
 
   Future<void> saveActions(ActionEntity action) async {
     print('saveActions');
@@ -61,8 +55,7 @@ class HomeController extends GetxController {
     });
   }
 
-  Future<void> saveActivity(ActivityEntity entity) async {
-    print('controller saveActivity');
-    var response = await _saveActivityUseCase.call(entity);
+  void saveActivity(ActivityEntity entity) {
+    _saveActivityUseCase.call(entity);
   }
 }

@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                                   return;
                                                 }
                                                 controller.addingAction.value = false;
-                                                controller.saveActions(ActionEntity(name: newActionController.text));
+                                                controller.saveActions(ActionEntity(actionName: newActionController.text));
                                                 newActionController.clear();
                                               },
                                             ),
@@ -117,7 +117,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                           children: [
                                             Container(
                                               width: MediaQuery.of(context).size.width - 50,
-                                              child: Text("${controller.actions[index].name}"),
+                                              child: Text("${controller.actions[index].actionName}"),
                                             ),
                                           ],
                                         ),
@@ -136,7 +136,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                           children: [
                                             Container(
                                               width: 100,
-                                              child: Text(controller.actions[index].name),
+                                              child: Text(controller.actions[index].actionName),
                                             ),
                                           ],
                                         ),
@@ -153,7 +153,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                         child: InkWell(
                           onTap: () {
                             controller.addingAction.value = true;
-                            controller.actions.add(ActionEntity(name: ''));
+                            controller.actions.add(ActionEntity(actionName: ''));
                             scrollController.animateTo(scrollController.position.maxScrollExtent + 60,
                                 duration: Duration(milliseconds: 500), curve: Curves.linear);
                           },
@@ -189,17 +189,17 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 width: MediaQuery.of(context).size.width,
                 height: 200,
                 child: DragTarget<ActionEntity>(onAccept: (ActionEntity action) {
-                  print('${action.name}');
+                  print('${action.actionName}');
                   controller.saveActivity(ActivityEntity(
                     day: DateTime.now().day,
-                    actionId: action.id!,
+                    actionId: action.actionId!,
                     actionName: '',
                     startOfActivity: DateTime.now(),
                   ));
                   controller.isStarted.value = true;
-                  controller.activeAction.value = action.name;
+                  controller.activeAction.value = action.actionName;
                   controller.currentActivity.value = ActivityEntity(
-                      day: DateTime.now().day, actionId: 0, startOfActivity: DateTime.now(), actionName: action.name);
+                      day: DateTime.now().day, actionId: 0, startOfActivity: DateTime.now(), actionName: action.actionName);
                   triggerTimer();
                 }, builder: (context, _, __) {
                   return Container(

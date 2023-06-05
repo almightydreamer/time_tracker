@@ -7,9 +7,8 @@ import 'package:drift/drift.dart';
 class ActivityMapper {
   ActivityEntity mapLocalToEntity(ActivityLocalDTO activity, ActionLocalDTO action) {
     return ActivityEntity(
-        id: activity.id,
-        day: activity.day,
         actionId: activity.actionId,
+        day: activity.day,
         actionName: action.name,
         endOfActivity: activity.endOfActivity,
         startOfActivity: activity.startOfActivity);
@@ -27,7 +26,7 @@ class ActivityMapper {
   ActivityCompanion mapEntityToData(ActivityEntity entity) {
     return ActivityCompanion.insert(
       dayId: entity.day,
-      actionId: entity.actionId,
+      actionId: entity.actionId!,
       startTime: entity.startOfActivity,
       endTime: Value(entity.endOfActivity),
     );
