@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:presentation/pages/home/controllers/cache_controller.dart';
 import 'package:simple_timer/simple_timer.dart';
 import 'controllers/home_controller.dart';
 import 'package:get/get.dart';
@@ -32,16 +33,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
     super.initState();
   }
 
+  ScrollController scrollController = ScrollController(initialScrollOffset: 0);
+  TextEditingController newActionController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    Get.put(HomeController());
     HomeController controller = Get.find();
-    ScrollController scrollController = ScrollController(initialScrollOffset: 0);
-    TextEditingController newActionController = TextEditingController();
-
-    //controller.saveActions();
-    print('activity ${DateFormat.Hms().format(controller.currentActivity.value.startOfActivity)} '
-        '|| time ${DateFormat.Hms().format(DateTime.now()).toString()}');
 
     return Scaffold(
       body: Container(
@@ -74,10 +71,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                     child: Container(
                                       height: 50,
                                       width: MediaQuery.of(context).size.width - 30,
-                                      decoration: BoxDecoration(
-                                          color: const Color(0xFF5e8c61),
-                                          borderRadius: BorderRadius.circular(12),
-                                          border: Border.all(color: Colors.black)),
+                                      decoration: BoxDecoration(color: const Color(0xFF5e8c61), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.black)),
                                       child: Row(
                                         children: [
                                           Container(
@@ -109,15 +103,12 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                       feedback: Container(
                                         height: 50,
                                         width: MediaQuery.of(context).size.width - 30,
-                                        decoration: BoxDecoration(
-                                            color: const Color(0xFF5e8c61),
-                                            borderRadius: BorderRadius.circular(12),
-                                            border: Border.all(color: Colors.black)),
+                                        decoration: BoxDecoration(color: const Color(0xFF5e8c61), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.black)),
                                         child: Row(
                                           children: [
                                             Container(
                                               width: MediaQuery.of(context).size.width - 50,
-                                              child: Text("${controller.actions[index].actionName}"),
+                                              child: Text(controller.actions[index].actionName),
                                             ),
                                           ],
                                         ),
@@ -128,10 +119,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                                       child: Container(
                                         height: 50,
                                         width: 150,
-                                        decoration: BoxDecoration(
-                                            color: const Color(0xFF5e8c61),
-                                            borderRadius: BorderRadius.circular(12),
-                                            border: Border.all(color: Colors.black)),
+                                        decoration: BoxDecoration(color: const Color(0xFF5e8c61), borderRadius: BorderRadius.circular(12), border: Border.all(color: Colors.black)),
                                         child: Row(
                                           children: [
                                             Container(
@@ -154,8 +142,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                           onTap: () {
                             controller.addingAction.value = true;
                             controller.actions.add(ActionEntity(actionName: ''));
-                            scrollController.animateTo(scrollController.position.maxScrollExtent + 60,
-                                duration: Duration(milliseconds: 500), curve: Curves.linear);
+                            scrollController.animateTo(scrollController.position.maxScrollExtent + 60, duration: Duration(milliseconds: 500), curve: Curves.linear);
                           },
                           child: Container(
                             width: 64,
@@ -189,54 +176,76 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 width: MediaQuery.of(context).size.width,
                 height: 200,
                 child: DragTarget<ActionEntity>(onAccept: (ActionEntity action) {
-                  print('${action.actionName}');
-                  controller.saveActivity(ActivityEntity(
-                    day: DateTime.now().day,
-                    actionId: action.actionId!,
-                    actionName: '',
-                    startOfActivity: DateTime.now(),
-                  ));
-                  controller.isStarted.value = true;
-                  controller.activeAction.value = action.actionName;
-                  controller.currentActivity.value = ActivityEntity(
-                      day: DateTime.now().day, actionId: 0, startOfActivity: DateTime.now(), actionName: action.actionName);
-                  triggerTimer();
+                  controller.draggedAction(action);
                 }, builder: (context, _, __) {
                   return Container(
                     height: 200,
                     width: 200,
-                    child: controller.activeAction.value == " "
-                        ? Container(
-                            color: Colors.cyan,
-                            height: 100,
-                            width: 100,
-                            child: Center(
-                                child: Text(
-                                    "${controller.currentActivity.value.actionName} ${controller.isStarted.value}")),
-                          )
-                        : Container(
-                            height: 100,
-                            width: 100,
-                            child: Center(
-                                child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'You are currently',
-                                  style: const TextStyle(fontSize: 32),
+                    child: controller.currentActivity.value == null
+                        ? Container()
+                        : Obx(() {
+                            CacheController cacheController = Get.find();
+                            return Container(
+                              height: 100,
+                              width: 100,
+                              child: Center(
+                                child: Stack(
+                                  children: [
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'You are currently',
+                                          style: const TextStyle(fontSize: 32),
+                                        ),
+                                        Text(
+                                          controller.currentActivity.value!.actionName,
+                                          style: const TextStyle(fontSize: 48),
+                                        ),
+                                        if (!cacheController.hasCached.value)
+                                          Text(
+                                            'for ${(Duration(seconds: controller.timerValue.value)).toString().split('.')[0].padLeft(8, '0')}',
+                                            style: TextStyle(fontSize: 24),
+                                          ),
+                                      ],
+                                    ),
+                                    if (cacheController.hasCached.value)
+                                      Positioned(
+                                        right: 0,
+                                        child: InkWell(
+                                          onTap: () {
+                                            var activity = cacheController.getPreviousActivity;
+                                            print(activity.actionName);
+                                            controller.currentActivity.value = activity;
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(6), color: Colors.lightBlueAccent),
+                                            padding: EdgeInsets.all(4),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  'Undo',
+                                                  style: TextStyle(color: Colors.white),
+                                                ),
+                                                SizedBox(
+                                                  width: 5,
+                                                ),
+                                                Icon(
+                                                  Icons.undo,
+                                                  color: Colors.white,
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
                                 ),
-                                Text(
-                                  "${controller.currentActivity.value.actionName}",
-                                  style: const TextStyle(fontSize: 48),
-                                ),
-                                Text(
-                                  'for ${(Duration(seconds: controller.timerValue.value)).toString().split('.')[0].padLeft(8, '0')}',
-                                  style: TextStyle(fontSize: 24),
-                                ),
-                              ],
-                            )),
-                          ),
+                              ),
+                            );
+                          }),
                   );
                 }),
               ),
@@ -245,10 +254,5 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         ),
       ),
     );
-  }
-
-  void triggerTimer() {
-    HomeController controller = Get.find();
-    controller.timerValue.value = 0;
   }
 }

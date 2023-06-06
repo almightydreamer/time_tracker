@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:presentation/pages/home/controllers/cache_controller.dart';
 import 'package:presentation/pages/statistics/statistic_page.dart';
 import 'package:presentation/pages/time_line/time_line_page.dart';
 
@@ -20,6 +22,7 @@ class _HomeTabPageState extends State<HomeTabPage> {
 
   @override
   void initState() {
+    Get.put(CacheController());
     super.initState();
   }
 

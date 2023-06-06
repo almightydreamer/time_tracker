@@ -9,6 +9,7 @@ import 'package:domain/modules/home/activity/usecase/resume_activity_usecase.dar
 import 'package:domain/modules/home/activity/usecase/save_activity_usecase.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
+import 'package:presentation/pages/home/controllers/cache_controller.dart';
 
 class HomeController extends GetxController {
   RxList<ActionEntity> actions = RxList();
@@ -20,17 +21,13 @@ class HomeController extends GetxController {
   final _getLastActivityUseCase = GetIt.instance.get<GetLastActivityUseCase>();
 
   RxBool isStarted = false.obs;
-  RxString activeAction = ''.obs;
-  Rx<ActivityEntity> currentActivity = ActivityEntity(day: 0, actionId: 0, startOfActivity: DateTime.now(), actionName: 'Stand-by').obs;
+  Rxn<ActivityEntity> currentActivity = Rxn();
   RxInt timerValue = 0.obs;
   RxBool addingAction = false.obs;
   RxBool savingActivity = false.obs;
 
   Future<void> saveActions(ActionEntity action) async {
-    print('saveActions');
-    List<ActionEntity> actions = [];
-    actions.add(action);
-    var response = await _saveActionsUseCase(actions);
+    var response = await _saveActionsUseCase.call([action]);
     response.fold((l) {}, (r) {});
   }
 
@@ -43,19 +40,39 @@ class HomeController extends GetxController {
   }
 
   Future<void> resumeActivity() async {
-    print('1');
     var response = await _getLastActivityUseCase.call();
-    print('2');
     response.fold((l) => null, (r) {
       if (r.endOfActivity == null) {
-        print('3');
         currentActivity.value = r;
         timerValue += DateTime.now().difference(r.startOfActivity).inSeconds;
       }
     });
   }
 
-  void saveActivity(ActivityEntity entity) {
-    _saveActivityUseCase.call(entity);
+  void resetTimer() {
+    timerValue.value = 0;
+  }
+
+  void draggedAction(ActionEntity entity) {
+    isStarted.value = true;
+    CacheController cacheController = Get.find();
+    var activityEntity = ActivityEntity(
+      day: DateTime.now().day,
+      actionId: entity.actionId!,
+      actionName: entity.actionName,
+      startOfActivity: DateTime.now(),
+    );
+    if(currentActivity.value != null) {
+      cacheController.setPreviousActivity(currentActivity.value!, () {
+      resetTimer();
+      timerValue.value += 5;
+      _saveActivityUseCase.call(activityEntity);
+    });
+      currentActivity.value = activityEntity;
+
+    } else {
+      currentActivity.value = activityEntity;
+      _saveActivityUseCase.call(activityEntity);
+    }
   }
 }

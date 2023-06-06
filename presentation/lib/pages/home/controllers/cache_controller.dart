@@ -3,7 +3,6 @@ import 'package:domain/modules/home/activity/entity/activity_entity.dart';
 import 'package:get/get.dart';
 
 class CacheController extends GetxController {
-
   ///
   /// TMPS project
   ///
@@ -14,14 +13,22 @@ class CacheController extends GetxController {
 
   RxBool hasCached = false.obs;
 
-  set setPreviousActivity(ActivityEntity activityEntity) {
+  void setPreviousActivity(ActivityEntity activityEntity, Function onReset) {
+    print(activityEntity.actionName);
     _previousActivity = activityEntity;
     hasCached.value = true;
     Timer.periodic(Duration(seconds: 1), (timer) {
-      if (timer.tick > 5) {
-        timer.cancel();
+      if (hasCached.value) {
+        if (timer.tick > 5) {
+          timer.cancel();
+          _previousActivity = null;
+          hasCached.value = false;
+          onReset.call();
+        }
+      } else {
         _previousActivity = null;
         hasCached.value = false;
+        timer.cancel();
       }
     });
   }
